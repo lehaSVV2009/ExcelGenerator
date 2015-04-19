@@ -1,6 +1,5 @@
 package com.kadet.memberGenerator.service;
 
-import com.kadet.memberGenerator.entity.Member;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -16,6 +15,14 @@ import java.util.List;
  */
 public class ExcelService {
 
+    public void fillExcel (String excelPath, List<List<String>> values) throws IOException {
+        FileOutputStream outputStream = getOrCreateOutputStream(excelPath);
+        Workbook workbook = new HSSFWorkbook();
+        fillWorkbook(workbook, values);
+        workbook.write(outputStream);
+        outputStream.close();
+    }
+
     private FileOutputStream getOrCreateOutputStream(String path) throws IOException {
         File yourFile = new File(path);
         if(!yourFile.exists()) {
@@ -24,30 +31,17 @@ public class ExcelService {
         return new FileOutputStream(yourFile);
     }
 
-    public void fillExcel (String excelPath, List<Member> members) throws IOException {
-        FileOutputStream outputStream = getOrCreateOutputStream(excelPath);
-        Workbook workbook = new HSSFWorkbook();
-        fillWorkbook(workbook, members);
-        workbook.write(outputStream);
-        outputStream.close();
-    }
-
-    private void fillWorkbook (Workbook workbook, List<Member> members) {
+    private void fillWorkbook (Workbook workbook, List<List<String>> values) {
         Sheet sheet = workbook.createSheet();
-        for (int i = 0; i < members.size(); ++i) {
-            fillRowByMember(sheet.createRow(i), members.get(i));
+        for (int i = 0; i < values.size(); ++i) {
+            fillRowByValues(sheet.createRow(i), values.get(i));
         }
     }
 
-    private Row fillRowByMember(Row row, Member member) {
-        row.createCell(0).setCellValue(member.getFirstName());
-        row.createCell(1).setCellValue(member.getLastName());
-        row.createCell(2).setCellValue(member.getTitle());
-        row.createCell(3).setCellValue(member.getCompany());
-        row.createCell(4).setCellValue(member.getEmail());
-        row.createCell(5).setCellValue(member.getPhone());
-        row.createCell(6).setCellValue(member.getMobile());
-        row.createCell(7).setCellValue(member.getRole());
+    private Row fillRowByValues(Row row, List<String> values) {
+        for (int i = 0; i < values.size(); ++i) {
+            row.createCell(i).setCellValue(values.get(i));
+        }
         return row;
     }
 

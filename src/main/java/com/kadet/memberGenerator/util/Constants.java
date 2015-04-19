@@ -8,20 +8,14 @@ import java.util.List;
  */
 public class Constants {
 
-    public final static List<String> roles = new ArrayList<String>(){{
-        add("Administrator");
-        add("Participant");
-        add("Observer");
-        add("");
-    }};
+    public final static String CONFIG_PATH = "/config.properties";
 
-    public static final List<String> mails = new ArrayList<String>(){{
+    public static final List<String> MAILS = new ArrayList<String>(){{
         add("gmail.com");
         add("grr.la");
         add("mail.ru");
         add("yandex.ru");
         add("joint.no");
     }};
-
 
 }
